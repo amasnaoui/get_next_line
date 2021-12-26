@@ -29,14 +29,13 @@ void	*ft_calloc(size_t count, size_t size)
 	return (p);
 }
 
-
 int	find(char *str, int *count)
 {
 	int	i;
 
 	i = -1;
 	*count = 0;
-	if(!str)
+	if (!str)
 		return (0);
 	while (str[++i])
 	{
@@ -47,10 +46,10 @@ int	find(char *str, int *count)
 	return (0);
 }
 
-char *get_line(int fd, int *count, char *rest)
+char	*get_line(int fd, int *count, char *rest)
 {
 	char	*buffer;
-	int	read_test;
+	int		read_test;
 
 	buffer = (char *)malloc(BUFFER_SIZE + 1);
 	if (!buffer)
@@ -60,34 +59,34 @@ char *get_line(int fd, int *count, char *rest)
 	{
 		read_test = read (fd, buffer, BUFFER_SIZE);
 		if (read_test < 0 || !*buffer)
-			return (free(buffer),free(rest),NULL);
+			return (free(buffer), free(rest), NULL);
 		buffer[read_test] = '\0';
-		if(!rest && read_test != 0)
+		if (!rest && read_test != 0)
 			rest = ft_strdup(buffer);
-		else if(rest && read_test != 0)
+		else if (rest && read_test != 0)
 			rest = ft_strjoin(rest, buffer);
 	}
 	free(buffer);
 	if (read_test == 0 && *rest == '\0')
-		return (free(rest),NULL);
+		return (free(rest), NULL);
 	return (rest);
 }
 
 char	*get_next_line(int fd)
 {
-	int	count;
-	char	*line;
+	int			count;
+	char		*line;
 	static char	*rest;
-	if(BUFFER_SIZE <= 0 || read(fd,NULL,0) < 0)
-		return(NULL);
+
 	count = 0;
+	if (BUFFER_SIZE <= 0 || read(fd, NULL, 0) < 0)
+		return (NULL);
 	if (!find(rest, &count))
 		rest = get_line(fd, &count, rest);
 	if (rest == NULL)
 		return (NULL);
 	line = ft_substr(rest, 0, count);
 	rest = ft_strdup2(rest, rest + (count));
-	
 	return (line);
 }
 

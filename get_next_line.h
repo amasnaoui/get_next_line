@@ -20,7 +20,7 @@
 # include<string.h>
 
 char	*get_next_line(int fd);
-char 	*get_line(int fd, int *count, char *rest);
+char	*get_line(int fd, int *count, char *rest);
 int		find(char *str, int *count);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strdup(char *s1);
