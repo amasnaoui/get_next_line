@@ -12,6 +12,24 @@
 
 #include "get_next_line.h"
 
+void	*ft_calloc(size_t count, size_t size)
+{
+	void	*p;
+	size_t	i;
+
+	i = 0;
+	p = malloc(count * size + 1);
+	if (!p)
+		return (NULL);
+	while (i < count * size + 1)
+	{
+		((unsigned char *)p)[i] = 0;
+		i++;
+	}
+	return (p);
+}
+
+
 int	find(char *str, int *count)
 {
 	int	i;
@@ -20,8 +38,6 @@ int	find(char *str, int *count)
 	*count = 0;
 	if(!str)
 		return (0);
-	// if (str[++i] == '\n')
-	// 	i++;
 	while (str[++i])
 	{
 		(*count)++;
@@ -36,7 +52,7 @@ char *get_line(int fd, int *count, char *rest)
 	char	*buffer;
 	int	read_test;
 
-	buffer = (char *)calloc(BUFFER_SIZE + 1, 1);
+	buffer = (char *)malloc(BUFFER_SIZE + 1);
 	if (!buffer)
 		return (NULL);
 	read_test = 1;
@@ -44,12 +60,8 @@ char *get_line(int fd, int *count, char *rest)
 	{
 		read_test = read (fd, buffer, BUFFER_SIZE);
 		if (read_test < 0 || !*buffer)
-		{
-			free(buffer);
-			free(rest);
-			return (NULL);
-		}
-		//buffer[read_test] = '\0';
+			return (free(buffer),free(rest),NULL);
+		buffer[read_test] = '\0';
 		if(!rest && read_test != 0)
 			rest = ft_strdup(buffer);
 		else if(rest && read_test != 0)
@@ -57,10 +69,7 @@ char *get_line(int fd, int *count, char *rest)
 	}
 	free(buffer);
 	if (read_test == 0 && *rest == '\0')
-	{
-		free(rest);
-		return (NULL);
-	}
+		return (free(rest),NULL);
 	return (rest);
 }
 
@@ -76,20 +85,20 @@ char	*get_next_line(int fd)
 		rest = get_line(fd, &count, rest);
 	if (rest == NULL)
 		return (NULL);
-	line = ft_substr(rest, 0, count + 1);
-	rest = ft_strdup2(rest, rest + (count + 1));
+	line = ft_substr(rest, 0, count);
+	rest = ft_strdup2(rest, rest + (count));
 	
 	return (line);
 }
 
-int main()
-{
-	int fd = open("test.txt", O_RDONLY);
-	char *line;
-	line = get_next_line(fd);
-	while (line)
-	{
-		printf("%s",line);
-		line = get_next_line(fd);
-	}
-}
+// int main()
+// {
+// 	int fd = open("test.txt", O_RDONLY);
+// 	char *line;
+// 	line = get_next_line(fd);
+// 	while (line)
+// 	{
+// 		printf("%s",line);
+// 		line = get_next_line(fd);
+// 	}
+// }

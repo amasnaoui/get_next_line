@@ -34,7 +34,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	if (!s2)
 		return (NULL);
 	len = (ft_strlen(s1) + ft_strlen(s2));
-	p = (char *)calloc((len + 1), 1);
+	p = (char *)ft_calloc(len, 1);
 	if (!p)
 		return (NULL);
 	while (s1[++i])
@@ -48,7 +48,6 @@ char	*ft_strjoin(char *s1, char *s2)
 		*p = s2[i];
 		p++;
 	}
-	//*p = 0;
 	free(s1);
 	return (p - len);
 }
@@ -66,9 +65,9 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	if (start >= lenstring)
 		return (ft_strdup("\0"));
 	if (start + len >= lenstring)
-		p = (char *)calloc(lenstring - start + 1, 1);
+		p = (char *)ft_calloc(lenstring - start, 1);
 	else
-		p = (char *)calloc(len + 1, 1);
+		p = (char *)ft_calloc(len, 1);
 	if (!p)
 		return (NULL);
 	while (s[start] && i < len)
@@ -77,7 +76,6 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		i++;
 		start++;
 	}
-	//p[i] = '\0';
 	return (p);
 }
 
@@ -89,7 +87,7 @@ char	*ft_strdup(char *s1)
 	i = 0;
 	if (!s1)
 		return (NULL);
-	p = (char *)calloc(ft_strlen(s1) + 1, 1);
+	p = (char *)ft_calloc(ft_strlen(s1), 1);
 	if (!p)
 		return (NULL);
 	while (s1[i])
@@ -97,7 +95,6 @@ char	*ft_strdup(char *s1)
 		p[i] = s1[i];
 		i++;
 	}
-	//p[i] = '\0';
 	return (p);
 }
 
@@ -109,7 +106,7 @@ char	*ft_strdup2(char *rest, const char *s1)
 	i = 0;
 	if (!s1)
 		return (NULL);
-	p = (char *)calloc(ft_strlen(s1) + 1, 1);
+	p = (char *)ft_calloc(ft_strlen(s1), 1);
 	if (!p)
 		return (NULL);
 	while (s1[i])
@@ -117,7 +114,6 @@ char	*ft_strdup2(char *rest, const char *s1)
 		p[i] = s1[i];
 		i++;
 	}
-	//p[i] = '\0';
 	free(rest);
 	return (p);
 }
