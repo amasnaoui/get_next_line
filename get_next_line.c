@@ -36,7 +36,7 @@ char *get_line(int fd, int *count, char *rest)
 	char	*buffer;
 	int	read_test;
 
-	buffer = (char *)malloc(BUFFER_SIZE + 1);
+	buffer = (char *)calloc(BUFFER_SIZE + 1, 1);
 	if (!buffer)
 		return (NULL);
 	read_test = 1;
@@ -49,7 +49,7 @@ char *get_line(int fd, int *count, char *rest)
 			free(rest);
 			return (NULL);
 		}
-		buffer[read_test] = '\0';
+		//buffer[read_test] = '\0';
 		if(!rest && read_test != 0)
 			rest = ft_strdup(buffer);
 		else if(rest && read_test != 0)
