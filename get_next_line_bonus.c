@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amasnaou <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/05 14:49:27 by amasnaou          #+#    #+#             */
-/*   Updated: 2021/12/05 14:49:31 by amasnaou         ###   ########.fr       */
+/*   Created: 2021/12/26 16:56:00 by amasnaou          #+#    #+#             */
+/*   Updated: 2021/12/26 16:56:02 by amasnaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 void	*ft_calloc(size_t count, size_t size)
 {
@@ -51,7 +51,7 @@ char	*get_line(int fd, int *count, char *rest)
 	char	*buffer;
 	int		read_test;
 
-	buffer = (char *)malloc(BUFFER_SIZE + 1);
+	buffer = (char *)malloc(BUFFER_SIZE);
 	if (!buffer)
 		return (NULL);
 	read_test = 1;
@@ -76,16 +76,39 @@ char	*get_next_line(int fd)
 {
 	int			count;
 	char		*line;
-	static char	*rest;
+	static char	*rest[1024];
 
 	count = 0;
 	if (BUFFER_SIZE <= 0 || read(fd, NULL, 0) < 0)
 		return (NULL);
-	if (!find(rest, &count))
-		rest = get_line(fd, &count, rest);
-	if (rest == NULL)
+	if (!find(rest[fd], &count))
+		rest[fd] = get_line(fd, &count, rest[fd]);
+	if (rest[fd] == NULL)
 		return (NULL);
-	line = ft_substr(rest, 0, count);
-	rest = ft_strdup2(rest, rest + (count));
+	line = ft_substr(rest[fd], 0, count);
+	rest[fd] = ft_strdup2(rest[fd], rest[fd] + (count));
 	return (line);
+}
+
+int main()
+{
+	int fd = open("test1.txt", O_RDONLY);
+	int fd1 = open("test2.txt", O_RDONLY);
+	// int fd2 = open("test3.txt", O_RDONLY);
+	char *line;
+	line = get_next_line(fd);
+	printf("%s",line);
+	line = get_next_line(fd1);
+	printf("%s",line);
+	line = get_next_line(fd);
+	printf("%s",line);
+	line = get_next_line(fd);
+	printf("%s",line);
+	line = get_next_line(fd1);
+	printf("%s",line);
+	// while (line)
+	// {
+	// 	printf("%s",line);
+	// 	line = get_next_line(fd);
+	// }
 }
