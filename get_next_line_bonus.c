@@ -58,16 +58,16 @@ char	*get_line(int fd, int *count, char *rest)
 	while (!find(rest, count) && read_test != 0)
 	{
 		read_test = read (fd, buffer, BUFFER_SIZE);
-		if (read_test < 0 || !*buffer)
+		if (read_test < 0)
 			return (free(buffer), free(rest), NULL);
 		buffer[read_test] = '\0';
-		if (!rest && read_test != 0)
+		if (!rest && read_test != 0 && *buffer)
 			rest = ft_strdup(buffer);
-		else if (rest && read_test != 0)
+		else if (rest && read_test != 0 && *buffer)
 			rest = ft_strjoin(rest, buffer);
 	}
 	free(buffer);
-	if (read_test == 0 && *rest == '\0')
+	if (!read_test && rest && !*rest)
 		return (free(rest), NULL);
 	return (rest);
 }
@@ -79,6 +79,8 @@ char	*get_next_line(int fd)
 	static char	*rest[1024];
 
 	count = 0;
+	if (fd < 0 || fd >= 10240)
+		return (NULL);
 	if (BUFFER_SIZE <= 0 || read(fd, NULL, 0) < 0)
 		return (NULL);
 	if (!find(rest[fd], &count))
@@ -88,27 +90,4 @@ char	*get_next_line(int fd)
 	line = ft_substr(rest[fd], 0, count);
 	rest[fd] = ft_strdup2(rest[fd], rest[fd] + (count));
 	return (line);
-}
-
-int main()
-{
-	int fd = open("test1.txt", O_RDONLY);
-	int fd1 = open("test2.txt", O_RDONLY);
-	// int fd2 = open("test3.txt", O_RDONLY);
-	char *line;
-	line = get_next_line(fd);
-	printf("%s",line);
-	line = get_next_line(fd1);
-	printf("%s",line);
-	line = get_next_line(fd);
-	printf("%s",line);
-	line = get_next_line(fd);
-	printf("%s",line);
-	line = get_next_line(fd1);
-	printf("%s",line);
-	// while (line)
-	// {
-	// 	printf("%s",line);
-	// 	line = get_next_line(fd);
-	// }
 }

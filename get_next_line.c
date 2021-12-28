@@ -67,7 +67,7 @@ char	*get_line(int fd, int *count, char *rest)
 			rest = ft_strjoin(rest, buffer);
 	}
 	free(buffer);
-	if (read_test == 0 && *rest == '\0')
+	if (!read_test && rest && !*rest)
 		return (free(rest), NULL);
 	return (rest);
 }
